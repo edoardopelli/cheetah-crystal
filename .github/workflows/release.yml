@@ -1,0 +1,150 @@
+name: Delivery Release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'corretto'
+
+      - name: Write Maven settings.xml
+        uses: whelk-io/maven-settings-xml-action@v22
+        with:
+          repositories: >
+            [
+            {
+              "id": "github",
+              "name": "github",
+              "url": "https://maven.pkg.github.com/edoardopelli/joinup-commons",
+              "releases": {
+                "enabled": "true"
+              }
+            }
+            ]
+          servers: >
+            [
+              {
+                "id": "github",
+                "username": "${env.GIT_USERNAME}",
+                "password": "${env.GITHUB_TOKEN}",
+                "configuration": {
+                "httpConfiguration": {
+                    "all": {
+                      "usePreemptive": "true"
+                    }
+                  }
+                }
+              }
+            ]
+
+
+
+      - name: Maven Release Prepare (Dry Run)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_USERNAME: edoardopelli
+        run: mvn -s /home/runner/.m2/settings.xml -B release:prepare-with-pom -DdryRun=true -Darguments="-DskipTests -Dmaven.javadoc.skip=true"
+      
+      - name: Fail if Dry Run Fails
+        if: ${{ !success() }}
+        run: |
+          echo "Dry run failed, stopping the workflow."
+          exit 1
+
+      - name: Process After Successful Dry Run
+        if: ${{ success() }}
+        run: |
+          mvn -f pom.xml.tag clean install -DskipTests
+          REPO=$(mvn -q -f pom.xml.tag -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec)
+          VERSION=$(mvn -q -f pom.xml.tag -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+
+          echo "REPO=$REPO" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "TAG=$REPO-$VERSION" >> $GITHUB_ENV
+        shell: bash
+      
+      - name: Tag Repository
+        if: ${{ env.TAG }}
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git tag -a $TAG -m "version $TAG"
+          git push origin $TAG
+          mv pom.xml.next pom.xml
+          rm pom.xml.releaseBackup
+          rm pom.xml.tag
+          rm release-pom.xml
+          rm release.properties
+          git commit -m "change snapshot version to next" .
+          git push
+        shell: bash
+        env:
+          REPO: ${{ env.REPO }}
+          VERSION: ${{ env.VERSION }}
+          TAG: ${{ env.TAG }}
+
+
+
+
+              
+      - name: Extract Project Version
+        run: |
+          echo "REPO=$(mvn -q -f pom.xml.tag -Dexec.executable=echo  -Dexec.args='${project.artifactId}' --non-recursive exec:exec)" >> $GITHUB_ENV
+          echo "VERSION=$(mvn -q -f pom.xml.tag -Dexec.executable=echo  -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
+            
+      - name: Build Docker Image
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and Push Docker Image edoardopelli/${{ env.REPO }}:${{ env.VERSION }}
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: edoardopelli/${{ env.REPO }}:${{ env.VERSION }}
+          build-args: |
+            version=${{ env.VERSION }}
+
+      - name: Build and Push Docker Image edoardopelli/${{ env.REPO }}:latest
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: edoardopelli/${{ env.REPO }}:latest
+          build-args: |
+              version=${{ env.VERSION }}
+        
+    
+
+      - name: Create Pull Request to Development
+        uses: peter-evans/create-pull-request@v4
+        with:
+          branch: 'merge-main-to-development'
+          base: 'development'
+          title: 'Merge Main into Development'
+          body: 'This PR merges the latest changes from main into development.'
+          delete-branch: true
+
+      - name: Create Pull Request to Test
+        uses: peter-evans/create-pull-request@v4
+        with:
+          branch: 'merge-main-to-test'
+          base: 'test'
+          title: 'Merge Main into Test'
+          body: 'This PR merges the latest changes from main into test.'
+          delete-branch: true
