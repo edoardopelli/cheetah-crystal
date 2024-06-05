@@ -41,6 +41,9 @@ public class TokenAuthenticationFilter implements Filter {
         EXCLUDE_URLS.add("/auth/login/otp");
         EXCLUDE_URLS.add("/auth/login");
         EXCLUDE_URLS.add("/actuator");
+        EXCLUDE_URLS.add("/validate/key");
+        EXCLUDE_URLS.add("/register/generate");
+        EXCLUDE_URLS.add("/error");
     }
 
     @Override
@@ -99,6 +102,7 @@ public class TokenAuthenticationFilter implements Filter {
     private boolean isExcluded(String path) {
         for (String exclude : EXCLUDE_URLS) {
             if (path.equals(exclude) || path.startsWith(exclude)) {
+            	System.out.println("path: "+path+"\texclude: "+exclude);
                 return true;
             }
         }

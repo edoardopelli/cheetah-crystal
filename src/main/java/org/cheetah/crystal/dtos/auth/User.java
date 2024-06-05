@@ -34,6 +34,15 @@ public class User implements UserDetails{
     private String otp;
     private List<? extends GrantedAuthority> authorities = List.of();
     private Map<String,Object> metadata;
+    
+    //Authenticator part
+    private String secretKey;
+    private int validationCode;
+    private List<Integer> scratchCodes;
+    
+    public List<? extends GrantedAuthority> getAuthorities(){
+    	return authorities;
+    }
 	
    
 }
