@@ -27,7 +27,7 @@ public class UserService {
     private PinRepository pinRepository;
 
     @Autowired
-	private TokenService tokenService;
+	private UsernamePasswordAuthenticationService tokenService;
 
     @Autowired
     private RedisService redisService;

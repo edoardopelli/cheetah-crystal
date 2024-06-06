@@ -36,7 +36,9 @@ public class User implements UserDetails{
     private Map<String,Object> metadata;
     
     //Authenticator part
+    @JsonProperty(access = Access.WRITE_ONLY)
     private String secretKey;
+    @JsonProperty(access = Access.WRITE_ONLY)
     private int validationCode;
     private List<Integer> scratchCodes;
     

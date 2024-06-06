@@ -39,7 +39,8 @@ public class TokenAuthenticationFilter implements Filter {
         EXCLUDE_URLS.add("/webjars/");
         EXCLUDE_URLS.add("/auth/login");
         EXCLUDE_URLS.add("/auth/login/otp");
-        EXCLUDE_URLS.add("/auth/login");
+        EXCLUDE_URLS.add("/auth/2fa/login");
+        EXCLUDE_URLS.add("/auth/2fa/otp");
         EXCLUDE_URLS.add("/actuator");
         EXCLUDE_URLS.add("/validate/key");
         EXCLUDE_URLS.add("/register/generate");

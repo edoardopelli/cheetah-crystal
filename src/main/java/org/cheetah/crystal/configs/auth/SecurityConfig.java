@@ -37,7 +37,7 @@ public class SecurityConfig {
 	@Profile({ "local", "test" })
 	SecurityFilterChain securityFilterChainNoAuth(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(authorize -> authorize
-				.requestMatchers( "/register/**", "/actuator", "/auth/login", "/auth/login/**",
+				.requestMatchers( "/register/**", "/actuator", "/auth/**",
 					 "/confirm-pin", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
 				.permitAll().anyRequest().authenticated())
 				.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -49,8 +49,8 @@ public class SecurityConfig {
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(authorize -> authorize
-						.requestMatchers("/validate/key", "/register/**",  "/confirm-pin",
-								"/auth/login", "/auth/login/**")
+						.requestMatchers("/register/**",  "/confirm-pin",
+								"/auth/**")
 						.permitAll().requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").denyAll()
 						.anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
