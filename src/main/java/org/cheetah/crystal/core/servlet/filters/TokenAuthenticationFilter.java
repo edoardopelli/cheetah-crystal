@@ -45,6 +45,7 @@ public class TokenAuthenticationFilter implements Filter {
         EXCLUDE_URLS.add("/validate/key");
         EXCLUDE_URLS.add("/register/generate");
         EXCLUDE_URLS.add("/error");
+        EXCLUDE_URLS.add("/actuator");
     }
 
     @Override

@@ -1,4 +1,4 @@
-package org.cheetah.crystal.dtos.auth;
+package org.cheetah.crystal.dtos.auth.a2f;
 
 import lombok.Data;
 

@@ -1,7 +1,7 @@
-package org.cheetah.crystal.controllers.auth;
+package org.cheetah.crystal.controllers.auth.basic;
 
 
-import org.cheetah.crystal.core.services.auth.UsernamePasswordAuthenticationService;
+import org.cheetah.crystal.core.services.auth.basic.UsernamePasswordAuthenticationService;
 import org.cheetah.crystal.rest.requests.LoginRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

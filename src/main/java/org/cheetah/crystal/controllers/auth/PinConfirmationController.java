@@ -1,5 +1,5 @@
 package org.cheetah.crystal.controllers.auth;
-import org.cheetah.crystal.core.services.auth.UserService;
+import org.cheetah.crystal.core.services.auth.basic.UserService;
 import org.cheetah.crystal.dtos.auth.User;
 import org.cheetah.crystal.rest.requests.PinConfirmationRequest;
 import org.cheetah.crystal.rest.responses.UserResponse;

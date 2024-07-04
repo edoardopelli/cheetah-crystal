@@ -1,21 +1,21 @@
-package org.cheetah.crystal.core.services.auth;
+package org.cheetah.crystal.core.services.auth.a2f.google;
 
 import java.util.Optional;
 
 import org.cheetah.crystal.core.exceptions.OtpCheckFailedException;
+import org.cheetah.crystal.core.services.auth.AbstractAuthenticationService;
 import org.cheetah.crystal.dtos.auth.User;
 import org.cheetah.crystal.mongodb.repositories.auth.UserRepository;
 import org.cheetah.crystal.redis.services.RedisService;
 import org.cheetah.crystal.rest.requests.LoginRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 @Service
-public class TwoFactorAuthenticationService extends AbstractAuthenticationService {
+public class GoogleAuthenticationService extends AbstractAuthenticationService {
 	
 	@Autowired
 	private UserRepository userRepository;

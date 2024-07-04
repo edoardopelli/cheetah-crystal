@@ -1,10 +1,12 @@
-package org.cheetah.crystal.core.services.auth;
+package org.cheetah.crystal.core.services.auth.basic;
 
 import java.util.Optional;
 
 import org.cheetah.crystal.core.exceptions.ExpiredOTPException;
 import org.cheetah.crystal.core.exceptions.InvalidOTPException;
 import org.cheetah.crystal.core.exceptions.UserNotFoundException;
+import org.cheetah.crystal.core.services.auth.AbstractAuthenticationService;
+import org.cheetah.crystal.core.services.auth.ServicesUtil;
 import org.cheetah.crystal.dtos.auth.User;
 import org.cheetah.crystal.mongodb.repositories.auth.UserRepository;
 import org.cheetah.crystal.redis.services.RedisService;

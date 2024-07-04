@@ -1,5 +1,4 @@
 package org.cheetah.crystal.dtos.auth;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

@@ -1,6 +1,6 @@
 package org.cheetah.crystal.configs.auth;
 
-import org.cheetah.crystal.core.googleauth.GoogleAuthRepository;
+import org.cheetah.crystal.core.auth.a2f.google.GoogleAuthRepository;
 import org.cheetah.crystal.core.servlet.filters.TokenAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -37,7 +37,7 @@ public class SecurityConfig {
 	@Profile({ "local", "test" })
 	SecurityFilterChain securityFilterChainNoAuth(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(authorize -> authorize
-				.requestMatchers( "/register/**", "/actuator", "/auth/**",
+				.requestMatchers( "/register/**", "/actuator/**", "/auth/**",
 					 "/confirm-pin", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
 				.permitAll().anyRequest().authenticated())
 				.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

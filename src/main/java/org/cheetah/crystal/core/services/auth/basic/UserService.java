@@ -1,10 +1,10 @@
-package org.cheetah.crystal.core.services.auth;
-import java.security.SecureRandom;
+package org.cheetah.crystal.core.services.auth.basic;
 import java.util.Optional;
 
 import org.cheetah.crystal.core.exceptions.PinNotFoundException;
 import org.cheetah.crystal.core.exceptions.UserAlreadyExistsException;
 import org.cheetah.crystal.core.exceptions.UserNotFoundException;
+import org.cheetah.crystal.core.services.auth.ServicesUtil;
 import org.cheetah.crystal.dtos.auth.Pin;
 import org.cheetah.crystal.dtos.auth.User;
 import org.cheetah.crystal.mongodb.repositories.auth.PinRepository;

@@ -1,12 +1,12 @@
-package org.cheetah.crystal.controllers.auth;
+package org.cheetah.crystal.controllers.auth.a2f.google;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import org.cheetah.crystal.core.services.auth.UserService;
+import org.cheetah.crystal.core.services.auth.basic.UserService;
 import org.cheetah.crystal.core.utils.CrystalSessionManager;
 import org.cheetah.crystal.dtos.auth.User;
-import org.cheetah.crystal.dtos.auth.ValidateCodeDto;
+import org.cheetah.crystal.dtos.auth.a2f.ValidateCodeDto;
 import org.cheetah.crystal.rest.responses.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,8 +29,8 @@ import com.warrenstrange.googleauth.GoogleAuthenticatorQRGenerator;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping("/register")
-public class RegistrationController {
+@RequestMapping("/register/google")
+public class GoogleRegistrationController {
 
 	@Autowired
 	private UserService userService;
@@ -39,6 +39,14 @@ public class RegistrationController {
 	private GoogleAuthenticator gAuth;
 	
 
+	/**
+	 * 
+	 * @param user
+	 * @param response
+	 * @return QRCode da visualizzare all'utente e di cui fare lo scan con l'app G2FA
+	 * @throws WriterException
+	 * @throws IOException
+	 */
 	@PostMapping(produces = MediaType.IMAGE_PNG_VALUE)
 	public ResponseEntity<byte[]> registerUser(@RequestBody User user, HttpServletResponse response)
 			throws WriterException, IOException {
@@ -67,10 +75,5 @@ public class RegistrationController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(outputStream.toByteArray());
 	}
 
-	@PostMapping("/validate/key")
-	public ResponseEntity<Boolean> validateKey(@RequestBody ValidateCodeDto body) {
-		boolean value = gAuth.authorizeUser(body.getUsername(), Integer.parseInt(body.getCode()));
-		return ResponseEntity.ok(value);
-	}
 
 }

@@ -1,14 +1,11 @@
-package org.cheetah.crystal.core.googleauth;
+package org.cheetah.crystal.core.auth.a2f.google;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.cheetah.crystal.core.exceptions.UserNotFoundException;
 import org.cheetah.crystal.core.utils.CrystalSessionManager;
 import org.cheetah.crystal.dtos.auth.User;
-import org.cheetah.crystal.dtos.auth.UserTOTP;
 import org.cheetah.crystal.mongodb.repositories.auth.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
