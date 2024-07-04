@@ -20,7 +20,7 @@ public class RedisService {
     
     public void saveUserOtp(String otp, User user) {
     	ValueOperations<String, Object> valueOps = redisTemplate.opsForValue();
-    	valueOps.set("OTP:"+user.getId(), otp, 60, TimeUnit.SECONDS); // Il token scade dopo 30 secondi
+    	valueOps.set("OTP:"+user.getId(), otp, 60, TimeUnit.SECONDS); // Il token scade dopo 60 secondi
     	
     }
     
